@@ -1,0 +1,32 @@
+.navigation {
+
+  &__heading {
+    margin-top: 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 $app-panel--padding--x * -1;
+    padding: 0;
+  }
+
+  a {
+    color: $grey--hard;
+    cursor: pointer;
+    display: block;
+    font-weight: 400;
+    padding: $app--sidebar--item--padding--y $app--sidebar--item--padding--x;
+    text-decoration: none;
+    transition: background $speed--xx-fast color $speed--xx-fast;
+
+    &.active {
+      color: $dark-grey;
+      font-weight: 400;
+    }
+
+    &:hover {
+      background: $medium-grey--soft;
+      color: $dark-grey;
+    }
+  }
+}

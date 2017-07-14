@@ -1,0 +1,15 @@
+@function input--text-shadow($color) {
+  @return 0 1px 0 darken($color, 5%),
+    0 1px 2px rgba(darken($color, 10%), 0.8);
+}
+
+@function input--box-shadow--active($color) {
+  @return 0 1px 0 rgba($color, 0.15),
+    0 2px 5px rgba($color, 0.15),
+    0 0 0 3px rgba($color, 0.2);
+}
+
+@function input--box-shadow($color) {
+  @return 0 1px 0 rgba($color, 0.1),
+    0 2px 5px rgba($color, 0.3);
+}
