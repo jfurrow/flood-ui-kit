@@ -1,0 +1,80 @@
+.form {
+
+  &__element {
+
+    &--has-addon {
+
+      &--placed-before {
+        padding-left: $button--has-addon--padding--left;
+      }
+
+      &--placed-after {
+        padding-right: $button--has-addon--padding--right;
+      }
+    }
+
+    &__addon {
+      border-width: 0;
+      border-style: solid;
+      border-color: $grey--soft;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      transition: all $speed--x-fast;
+      top: 0;
+
+      .inverse & {
+        border-color: $darkest-grey--darker;
+      }
+
+      :focus + &,
+      :active + & {
+        border-color: rgba($blue, 0.15);
+        transition: all $speed--xx-fast;
+
+        .icon {
+          fill: $blue;
+          transition: all $speed--xx-fast;
+
+          &--stroke {
+            fill: none;
+            stroke: $blue;
+          }
+        }
+      }
+
+      .icon {
+        fill: $grey;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%);
+        transition: all $speed--x-fast;
+
+        &--stroke {
+          fill: none;
+          stroke: $grey;
+        }
+      }
+
+      &--placed-before {
+        border-right-width: 1px;
+        left: 0;
+      }
+
+      &--placed-after {
+        border-left-width: 1px;
+        right: 0;
+      }
+
+      &--is-icon {
+        width: $button--addon--width;
+      }
+
+      &--is-interactive {
+        pointer-events: normal;
+      }
+    }
+  }
+}

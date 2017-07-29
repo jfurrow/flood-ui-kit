@@ -1,0 +1,38 @@
+.panel {
+  border: 1px solid $grey--lighter;
+  border-radius: $border-radius--medium;
+  box-shadow: panel--box-shadow($grey--lighter);
+  overflow: hidden;
+
+  &--medium {
+
+    .panel {
+
+      &__content {
+        padding: $space--medium $space--x-large;
+      }
+
+      &__header {
+        padding: $space--medium $space--x-large 0 $space--x-large;
+      }
+
+      &__footer {
+        padding: 0 $space--x-large $space--medium $space--x-large;
+      }
+    }
+  }
+
+  &__header {
+
+    &.panel {
+
+      &__header {
+
+        &--has-border {
+          border-bottom: 1px solid $grey--soft;
+          padding-bottom: $space--medium;
+        }
+      }
+    }
+  }
+}

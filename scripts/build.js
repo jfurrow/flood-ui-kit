@@ -1,5 +1,3 @@
-'use strict';
-
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
@@ -14,30 +12,54 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
-const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const config = require('../config/webpack.config.prod');
 const paths = require('../config/paths');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+const pkgInfo = require('../package.json');
+
+const introString = `Building ${pkgInfo.name} for distribution...`;
+const introStringStyled = `Building ${chalk.underline(pkgInfo.name)} for distribution...`;
+const padding = 5;
+
+function centerText(string = '', stringLength, referenceLength) {
+  if (stringLength > referenceLength) {
+    return string;
+  }
+
+  const diff = referenceLength - stringLength;
+  let paddingLeft = Math.floor(diff / 2);
+  let paddingRight = paddingLeft;
+
+
+  if (diff % 2 > 0) {
+    paddingRight += diff % 2;
+  }
+
+  return ` ${Array(paddingLeft).join(' ')}${string}${Array(paddingRight).join(' ')} `;
+}
+
+const version = `v${pkgInfo.version}`;
+
+const headerWidth = introString.length + padding * 2;
+
+console.log(chalk.dim(Array(headerWidth + 1).join('-')));
+console.log(chalk.dim(centerText(chalk.bold(chalk.white(' ')), ' '.length, headerWidth)));
+console.log(chalk.dim(centerText(chalk.bold(chalk.white(introStringStyled)), introString.length, headerWidth)));
+console.log(chalk.dim(centerText(chalk.bold(chalk.dim(version)), version.length, headerWidth)));
+console.log(chalk.dim(centerText(chalk.bold(chalk.white(' ')), ' '.length, headerWidth)));
+console.log(chalk.dim(`${Array(headerWidth + 1).join('-')}\n`));
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const useYarn = fs.existsSync(paths.yarnLockFile);
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
-
-// Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
-  process.exit(1);
-}
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
@@ -46,8 +68,6 @@ measureFileSizesBeforeBuild(paths.appBuild)
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
-    // Merge with the public folder
-    copyPublicFolder();
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -67,10 +87,10 @@ measureFileSizesBeforeBuild(paths.appBuild)
             ' to the line before.\n'
         );
       } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+        console.log(chalk.green('Compiled JavaScript successfully.\n'));
       }
 
-      console.log('File sizes after gzip:\n');
+      console.log('JavaScript bundle size (gzip):');
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
@@ -79,32 +99,25 @@ measureFileSizesBeforeBuild(paths.appBuild)
         WARN_AFTER_CHUNK_GZIP_SIZE
       );
       console.log();
-
-      const appPackage = require(paths.appPackageJson);
-      const publicUrl = paths.publicUrl;
-      const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), paths.appBuild);
-      printHostingInstructions(
-        appPackage,
-        publicUrl,
-        publicPath,
-        buildFolder,
-        useYarn
-      );
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
-      console.log((err.message || err) + '\n');
+      console.trace((err.message || err) + '\n');
       process.exit(1);
     }
   );
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
-  console.log('Creating an optimized production build...');
+  console.log(chalk.blue('Copying SCSS...'));
+  fs.copy(paths.styleSrc, paths.appBuild)
+    .then(() => console.log(chalk.green('Copied SCSS successfully.')))
+    .catch((error) => console.error(chalk.red('Failed copying SCSS.')));
 
+  console.log(chalk.blue('Compiling JavaScript...'));
   let compiler = webpack(config);
   return new Promise((resolve, reject) => {
+
     compiler.run((err, stats) => {
       if (err) {
         return reject(err);
@@ -133,12 +146,5 @@ function build(previousFileSizes) {
         warnings: messages.warnings,
       });
     });
-  });
-}
-
-function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
-    dereference: true,
-    filter: file => file !== paths.appHtml,
   });
 }

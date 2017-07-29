@@ -1,8 +1,16 @@
 .section {
-  margin-bottom: $space--xx-large;
+  margin-bottom: $space--xxx-large;
 
   &__heading {
     margin-bottom: $space;
-    margin-top: $space;
+    margin-top: 0;
+  }
+
+  &.inverse {
+    background: $another-grey;
+  }
+
+  &.padded {
+    padding: $space--large $space--x-large;
   }
 }

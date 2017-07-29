@@ -9,12 +9,12 @@ class Overlay extends Component {
   };
 
   render() {
-    const classes = classnames('overlay', {
+    const classes = classnames('overlay', this.props.additionalClassNames, {
       'overlay--transparent': this.props.isTransparent
     });
 
     return (
-      <div className={classes} onClick={this.props.onClick}>
+      <div className={classes} onClickCapture={this.props.onClick}>
         {this.props.children}
       </div>
     );

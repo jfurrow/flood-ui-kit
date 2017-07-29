@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i');
+
+html {
+  font-size: $font-size--medium;
+}
+
+body {
+  color: $grey;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.25;
+  font-size: $font-size--small;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: $dark-grey;
+  font-size: $font-size--medium;
+  margin: 0;
+
+  .inverse & {
+    color: $white;
+  }
+}
+
+h1,
+.h1 {
+  font-size: $font-size--xx-large;
+  font-weight: 700;
+  margin: $space--x-large 0;
+}
+
+h2,
+.h2 {
+  font-size: $font-size--x-large;
+  font-weight: 500;
+  margin: $space--large 0;
+}
+
+h3,
+.h3 {
+  font-size: $font-size--large;
+  font-weight: 400;
+  margin: $space--medium 0;
+}
+
+h4,
+.h4 {
+  font-size: $font-size--small;
+  font-weight: 500;
+  margin: $space 0;
+}
+
+h5,
+.h5 {
+  font-size: $font-size--x-small;
+  font-weight: 400;
+  margin: $space--small 0;
+}
+
+h6,
+.h6 {
+  font-size: $font-size--xx-small;
+  font-weight: 400;
+  margin: $space--x-small 0;
+}
+
+.copy {
+
+  &--lead {
+    font-size: $font-size--medium;
+    line-height: 1.5rem;
+    font-weight: 300;
+  }
+}
+
+p {
+  margin: 0 0 $space--medium 0;
+}
+
+code {
+  background: $grey--soft;
+  border-radius: $border-radius--small;
+  color: $grey--harder;
+  font-family: $font-family--monospace;
+  font-size: 85%;
+  padding: $space--xx-small $space--x-small;
+}

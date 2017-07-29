@@ -1,0 +1,51 @@
+.navigation {
+
+  &__heading {
+    margin-bottom: $space--x-small;
+    margin-top: 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 $app-panel--padding--x * -1;
+    padding: 0;
+  }
+
+  a {
+    color: $grey--hard;
+    cursor: pointer;
+    display: block;
+    font-weight: 400;
+    padding: $app--sidebar--item--padding--y $app--sidebar--item--padding--x;
+    position: relative;
+    text-decoration: none;
+    transition: background $speed--xx-fast color $speed--xx-fast;
+
+    &:hover {
+      background: $medium-grey--soft;
+      color: $dark-grey;
+    }
+
+    &:after {
+      background: $blue;
+      bottom: 0;
+      content: '';
+      display: block;
+      opacity: 0;
+      position: absolute;
+      right: -1px;
+      top: 0;
+      transition: opacity $speed--x-fast;
+      width: 2px;
+    }
+
+    &.is-active {
+      color: $blue;
+      font-weight: 500;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}

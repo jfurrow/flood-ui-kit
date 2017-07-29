@@ -1,9 +1,19 @@
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 class Portal extends React.Component {
+  static defaultProps = {
+    children: <div />
+  };
+
+  static propTypes = {
+    children: PropTypes.node
+  };
+
   componentDidMount() {
     this._nodeEl = global.document.createElement('div');
+    this._nodeEl.classList.add('portal')
     global.document.body.appendChild(this._nodeEl);
     this.renderChildren(this.props);
   }
@@ -25,13 +35,5 @@ class Portal extends React.Component {
     return null;
   }
 }
-
-Portal.defaultProps = {
-  children: <div />
-};
-
-Portal.propTypes = {
-  children: PropTypes.node
-};
 
 export default Portal;
