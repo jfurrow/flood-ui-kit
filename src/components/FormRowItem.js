@@ -6,6 +6,7 @@ class FormRowItem extends Component {
   static propTypes = {
     grow: PropTypes.bool,
     shrink: PropTypes.bool,
+    type: PropTypes.string,
     width: PropTypes.oneOf([
       'auto',
       'one-eighth',
@@ -28,7 +29,8 @@ class FormRowItem extends Component {
     const classes = classnames('form__row__item', this.props.className, {
       [`form__row__item--${this.props.width}`]: this.props.width,
       'form__row__item--grow': this.props.grow,
-      'form__row__item--shrink': this.props.shrink
+      'form__row__item--shrink': this.props.shrink,
+      'form__row__item--error': this.props.type === 'error'
     });
 
     return (

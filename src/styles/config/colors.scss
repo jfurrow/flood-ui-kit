@@ -2,6 +2,12 @@
   @return darken($color, 6% * $modifier);
 }
 
+$white: #fff;
+
+$red: #f34570;
+$red--alpha--light: rgba($red, 0.1);
+$red--alpha--medium: rgba($red, 0.2);
+
 $blue: #349CF4;
 $blue--light: lighten($blue, 7%);
 $blue--lighter: lighten($blue, 40%);
@@ -41,5 +47,3 @@ $light-grey: #E9EEF2;
 $light-grey--lighter: #F8F9FB;
 $light-grey--soft: rgba($light-grey, 0.15);
 $light-grey--hard: harden($light-grey);
-
-$white: #fff;

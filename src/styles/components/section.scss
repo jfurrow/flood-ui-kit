@@ -1,8 +1,8 @@
 .section {
-  margin-bottom: $space--xxx-large;
+  margin-bottom: $spacing--xxx-large;
 
   &__heading {
-    margin-bottom: $space;
+    margin-bottom: $spacing;
     margin-top: 0;
   }
 
@@ -11,6 +11,6 @@
   }
 
   &.padded {
-    padding: $space--large $space--x-large;
+    padding: $spacing--large $spacing--x-large;
   }
 }

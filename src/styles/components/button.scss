@@ -8,6 +8,7 @@
   cursor: pointer;
   color: $white;
   font-weight: 500;
+  line-height: 1.5;
   position: relative;
   user-select: none;
 
@@ -35,6 +36,26 @@
       border-color: darken($blue--hard, 5%);
       box-shadow: form--element--box-shadow--active($blue--hard);
     }
+
+    .inverse & {
+      border-color: $blue;
+
+      &:focus,
+      &:hover {
+        background: $blue--light;
+        border-color: $blue--light;
+      }
+
+      &:active,
+      &:focus {
+        box-shadow: form--element--inverse--box-shadow--active($blue--light);
+      }
+
+      &:active {
+        background: $blue;
+        border-color: $blue;
+      }
+    }
   }
 
   &--secondary {
@@ -56,6 +77,26 @@
       background: $green--hard;
       border-color: darken($green--hard, 5%);
     }
+
+    .inverse & {
+      border-color: $green;
+
+      &:focus,
+      &:hover {
+        background: $green--light;
+        border-color: $green--light;
+      }
+
+      &:active,
+      &:focus {
+        box-shadow: form--element--inverse--box-shadow--active($green--light);
+      }
+
+      &:active {
+        background: $green;
+        border-color: $green;
+      }
+    }
   }
 
   &--tertiary {
@@ -76,6 +117,26 @@
     &:active {
       background: $grey--hard;
       border-color: darken($grey--hard, 5%);
+    }
+
+    .inverse & {
+      border-color: $grey;
+
+      &:focus,
+      &:hover {
+        background: $grey--light;
+        border-color: $grey--light;
+      }
+
+      &:active,
+      &:focus {
+        box-shadow: form--element--inverse--box-shadow--active($grey--light);
+      }
+
+      &:active {
+        background: $grey;
+        border-color: $grey;
+      }
     }
   }
 
@@ -107,6 +168,7 @@
       box-shadow: $form--element--inverse--box-shadow;
       color: $input--inverse--foreground;
 
+      &:focus,
       &:hover {
         border-color: $input--inverse--border--hover;
         color: $input--inverse--foreground--hover;
@@ -125,27 +187,27 @@
     }
   }
 
-  &--primary,
-  &--secondary,
-  &--tertiary {
+  // &--primary,
+  // &--secondary,
+  // &--tertiary {
 
-    .inverse & {
-      border: 1px solid transparent;
-      box-shadow:
-        0 0 0 1px rgba($input--inverse--border, 0.5),
-        0 0 0 2px rgba($input--inverse--border, 0.2);
+  //   .inverse & {
+  //     // border: 1px solid transparent;
+  //     // box-shadow:
+  //     //   0 0 0 1px rgba($input--inverse--border, 0.5),
+  //     //   0 0 0 2px rgba($input--inverse--border, 0.2);
 
-      &:active,
-      &:focus {
-        box-shadow:
-          0 0 0 1px rgba($input--inverse--border, 0.2),
-          0 0 0 2px rgba($input--inverse--border, 0.7);
-      }
-    }
-  }
+  //     &:active,
+  //     &:focus {
+  //       box-shadow:
+  //         0 0 0 1px rgba($input--inverse--border, 0.2),
+  //         0 0 0 2px rgba($input--inverse--border, 0.7);
+  //     }
+  //   }
+  // }
 
 
-  &--disabled {
+  &--is-disabled {
     box-shadow: form--element--box-shadow($blue);
     color: $grey--light;
     text-shadow: none;
@@ -162,8 +224,39 @@
   }
 
   &__content {
+    opacity: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: opacity $speed--x-fast;
     white-space: nowrap;
+  }
+
+  .icon {
+
+    &--loading {
+      left: 50%;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity $speed--fast;
+    }
+  }
+
+  &--is-loading {
+
+    .button {
+
+      &__content {
+        opacity: 0;
+      }
+    }
+
+    .icon {
+
+      &--loading {
+        opacity: 1;
+      }
+    }
   }
 }

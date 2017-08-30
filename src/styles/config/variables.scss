@@ -2,17 +2,17 @@
 $form--element--border-radius: $border-radius--medium;
 $form--element--border-width: 1px;
 $form--element--height: 36px;
-$form--element--padding--x: $space--medium;
+$form--element--padding--x: $spacing--medium;
 $form--element--padding--y: 0;
-$form__row--margin--vertical: $space--medium;
+$form__row--margin--vertical: $spacing--medium;
 
 // Checkboxes & Radio buttons
-$toggle-input--height: $space--large;
-$toggle-input--width: $space--large;
+$toggle-input--height: $spacing--large;
+$toggle-input--width: $spacing--large;
 
 // Select
-$select--indicator--width: $form--element--padding--x * 2 + $space--small;
-$select--button--padding-right: $select--indicator--width + $space--x-small;
+$select--indicator--width: $form--element--padding--x * 2 + $spacing--small;
+$select--button--padding-right: $select--indicator--width + $spacing--x-small;
 
 // Input Elements
 $input--background: $white;
@@ -36,9 +36,9 @@ $input--inverse--foreground--placeholder--active: rgba(lighten($blue, 15%), 0.5)
 $input--inverse--foreground--placeholder: rgba($medium-grey, 0.25);
 $input--inverse--foreground--placeholder--hover: rgba($medium-grey, 0.4);
 
-$input--addon--width: $form--element--padding--x * 2 + $space--small + $form--element--border-width;
-$input--addon--padding--right: $input--addon--width + $space--x-small;
-$input--addon--padding--left: $input--addon--width + $space;
+$input--addon--width: $form--element--padding--x * 2 + $spacing--small + $form--element--border-width;
+$input--addon--padding--right: $input--addon--width + $spacing--x-small;
+$input--addon--padding--left: $input--addon--width + $spacing;
 
 // Button
 $button--addon--width: $input--addon--width;

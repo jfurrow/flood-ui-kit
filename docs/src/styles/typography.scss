@@ -37,42 +37,42 @@ h1,
 .h1 {
   font-size: $font-size--xx-large;
   font-weight: 700;
-  margin: $space--x-large 0;
+  margin: $spacing--x-large 0;
 }
 
 h2,
 .h2 {
   font-size: $font-size--x-large;
   font-weight: 500;
-  margin: $space--large 0;
+  margin: $spacing--large 0;
 }
 
 h3,
 .h3 {
   font-size: $font-size--large;
   font-weight: 400;
-  margin: $space--medium 0;
+  margin: $spacing--medium 0;
 }
 
 h4,
 .h4 {
   font-size: $font-size--small;
   font-weight: 500;
-  margin: $space 0;
+  margin: $spacing 0;
 }
 
 h5,
 .h5 {
   font-size: $font-size--x-small;
   font-weight: 400;
-  margin: $space--small 0;
+  margin: $spacing--small 0;
 }
 
 h6,
 .h6 {
   font-size: $font-size--xx-small;
   font-weight: 400;
-  margin: $space--x-small 0;
+  margin: $spacing--x-small 0;
 }
 
 .copy {
@@ -85,7 +85,7 @@ h6,
 }
 
 p {
-  margin: 0 0 $space--medium 0;
+  margin: 0 0 $spacing--medium 0;
 }
 
 code {
@@ -94,5 +94,5 @@ code {
   color: $grey--harder;
   font-family: $font-family--monospace;
   font-size: 85%;
-  padding: $space--xx-small $space--x-small;
+  padding: $spacing--xx-small $spacing--x-small;
 }

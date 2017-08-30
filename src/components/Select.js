@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
 import Button from './Button';
+import {dispatchChangeEvent} from './util/forms';
 import FormElementAddon from './FormElementAddon';
 import Chevron from '../icons/Chevron';
 import FormRowItem from './FormRowItem';
@@ -34,7 +34,9 @@ export default class Select extends Component {
     priority: 'quaternary'
   };
 
-  _triggerRef = null;
+  menuRef = null;
+  inputRef = null;
+  triggerRef = null;
 
   constructor(props) {
     super(props);
@@ -49,21 +51,21 @@ export default class Select extends Component {
     if (!prevState.isOpen && this.state.isOpen) {
       // TODO: Set focus on the dropdown menu.
     } else if (prevState.isOpen && !this.state.isOpen) {
-      // this._triggerRef.focus();
+      // this.triggerRef.focus();
     }
   }
 
   componentWillUpdate(_nextProps, nextState) {
     if (nextState.isOpen && !this.state.isOpen) {
       global.addEventListener('keydown', this.handleKeyDown);
-      global.addEventListener('scroll', this.handleWindowScroll);
+      global.addEventListener('scroll', this.handleWindowScroll, {capture: true});
 
       if (this.props.onOpen) {
         this.props.onOpen();
       }
     } else if (!nextState.isOpen && this.state.isOpen) {
       global.addEventListener('keydown', this.handleKeyDown);
-      global.removeEventListener('scroll', this.handleWindowScroll);
+      global.removeEventListener('scroll', this.handleWindowScroll, {capture: true});
 
       if (this.props.onClose) {
         this.props.onClose();
@@ -72,10 +74,6 @@ export default class Select extends Component {
   }
 
   getItemList(children) {
-    if (!this.state.isOpen) {
-      return null;
-    }
-
     const selectItems = children.reduce(
       (accumulator, child) => {
         if (child.props.placeholder) {
@@ -97,33 +95,37 @@ export default class Select extends Component {
       []
     );
 
-    const buttonBoundingRect = this._triggerRef.getBoundingClientRect();
-    const windowHeight = global.innerHeight;
     const dropdownStyle = {};
+    let shouldRenderAbove = false;
 
-    const shouldRenderAbove = (
-      windowHeight - buttonBoundingRect.bottom < minPreferableBottomSpace
-      && buttonBoundingRect.top > (windowHeight - buttonBoundingRect.bottom)
-    );
+    if (this.triggerRef) {
+      const buttonBoundingRect = this.triggerRef.getBoundingClientRect();
+      const windowHeight = global.innerHeight;
 
-    if (shouldRenderAbove) {
-      // More room on top
-      dropdownStyle.top = 'auto';
-      dropdownStyle.bottom = (windowHeight - buttonBoundingRect.bottom) + buttonBoundingRect.height + 5;
-      dropdownStyle.maxHeight = buttonBoundingRect.top - 10;
-    } else {
-      dropdownStyle.top = buttonBoundingRect.bottom + 5;
-      dropdownStyle.maxHeight = global.innerHeight - buttonBoundingRect.bottom - 10;
-    }
+      shouldRenderAbove = (
+        windowHeight - buttonBoundingRect.bottom < minPreferableBottomSpace
+        && buttonBoundingRect.top > (windowHeight - buttonBoundingRect.bottom)
+      );
 
-    if (this.props.matchTriggerWidth) {
-      dropdownStyle.width = buttonBoundingRect.width;
-      dropdownStyle.left = buttonBoundingRect.left;
-      dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
-    } else if (this.props.menuAlign === 'right') {
-      dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
-    } else {
-      dropdownStyle.left = buttonBoundingRect.left;
+      if (shouldRenderAbove) {
+        // More room on top
+        dropdownStyle.top = 'auto';
+        dropdownStyle.bottom = (windowHeight - buttonBoundingRect.bottom) + buttonBoundingRect.height + 5;
+        dropdownStyle.maxHeight = buttonBoundingRect.top - 10;
+      } else {
+        dropdownStyle.top = buttonBoundingRect.bottom + 5;
+        dropdownStyle.maxHeight = global.innerHeight - buttonBoundingRect.bottom - 10;
+      }
+
+      if (this.props.matchTriggerWidth) {
+        dropdownStyle.width = buttonBoundingRect.width;
+        dropdownStyle.left = buttonBoundingRect.left;
+        dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
+      } else if (this.props.menuAlign === 'right') {
+        dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
+      } else {
+        dropdownStyle.left = buttonBoundingRect.left;
+      }
     }
 
     const classes = classnames('select__items', {
@@ -133,9 +135,9 @@ export default class Select extends Component {
     });
 
     return (
-      <div className="select__menu">
+      <div>
         <Overlay additionalClassNames="select__overlay" onClick={this.handleOverlayClick} isTransparent />
-        <div className={classes} style={dropdownStyle}>
+        <div className={classes} ref={(ref) => this.menuRef = ref} style={dropdownStyle}>
           {selectItems}
         </div>
       </div>
@@ -168,7 +170,7 @@ export default class Select extends Component {
         <this.props.triggerComponent
           isOpen={this.state.isOpen}
           onClick={this.handleTriggerClick}
-          triggerRef={ref => this._triggerRef = ref}>
+          triggerRef={ref => this.triggerRef = ref}>
           {this.getSelectedItem(selectItems)}
         </this.props.triggerComponent>
       );
@@ -177,7 +179,7 @@ export default class Select extends Component {
     return (
       <Button
         additionalClassNames="select__button"
-        buttonRef={ref => this._triggerRef = ref}
+        buttonRef={ref => this.triggerRef = ref}
         addonPlacement="after"
         onClick={this.handleTriggerClick}
         priority={this.props.priority}
@@ -195,11 +197,15 @@ export default class Select extends Component {
   };
 
   handleItemClick = id => {
-    this.setState({isOpen: false, selectedID: id});
+    this.setState({isOpen: false, selectedID: id}, () => {
+      if (this.props.onSelect) {
+        this.props.onSelect(id);
+      }
 
-    if (this.props.onSelect) {
-      this.props.onSelect(id);
-    }
+      if (this.inputRef) {
+        dispatchChangeEvent(this.inputRef);
+      }
+    });
   };
 
   handleKeyDown = event => {
@@ -214,18 +220,13 @@ export default class Select extends Component {
     this.toggleOpenState();
   };
 
-  handleWindowScroll = _.throttle(
-    () => {
+  handleWindowScroll = (event) => {
+    if (this.menuRef && !this.menuRef.contains(event.target)) {
       if (this.state.isOpen) {
         this.setState({isOpen: false});
       }
-    },
-    200,
-    // TODO: Isn't leading the default option?
-    {
-      leading: true
     }
-  );
+  };
 
   toggleOpenState = () => {
     this.setState({
@@ -251,13 +252,17 @@ export default class Select extends Component {
           <input
             className="input input--hidden"
             name={this.props.id}
+            onChange={(event) => {console.log(event)}}
             tabIndex={-1}
+            ref={(ref) => this.inputRef = ref}
             type="text"
             value={this.state.selectedID} />
           {this.getTrigger(selectItems)}
           <Portal>
-            <TransitionGroup transitionName="select__menu">
-              {this.getItemList(selectItems)}
+            <TransitionGroup in={this.state.isOpen} transitionName="select__menu">
+              <div className="select__menu">
+                {this.getItemList(selectItems)}
+              </div>
             </TransitionGroup>
           </Portal>
         </div>

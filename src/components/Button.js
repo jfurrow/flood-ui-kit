@@ -2,8 +2,10 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
+import FadeIn from './FadeIn';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
+import LoadingRing from '../icons/LoadingRing';
 
 export default class Button extends Component {
   static propTypes = {
@@ -75,10 +77,10 @@ export default class Button extends Component {
         'form__element--has-addon': this.props.addonPlacement,
         [`form__element--has-addon--placed-${this.props.addonPlacement}`]: this.props.addonPlacement,
         [`button--${this.props.priority}`]: this.props.priority,
-        'button--disabled': this.props.disabled
+        'button--is-loading': this.props.isLoading,
+        'button--is-disabled': this.props.disabled
       }
     );
-
     const {addonNodes, childNode} = this.getButtonContent();
 
     const content = (
@@ -90,6 +92,9 @@ export default class Button extends Component {
           ref={this.props.buttonRef}
           type={this.props.type}>
           {childNode}
+          <FadeIn in={this.props.isLoading}>
+            <LoadingRing />
+          </FadeIn>
         </button>
         {addonNodes}
       </div>

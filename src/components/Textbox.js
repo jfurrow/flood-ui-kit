@@ -7,10 +7,10 @@ import FormRowItem from './FormRowItem';
 
 export default class Textbox extends Component {
   static propTypes = {
-    checked: PropTypes.bool,
     defaultValue: PropTypes.string,
     addonPlacement: PropTypes.oneOf(['before', 'after']),
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['password', 'text'])
   };
 
   static defaultProps = {
@@ -52,7 +52,7 @@ export default class Textbox extends Component {
             placeholder={this.props.placeholder}
             name={this.props.id}
             tabIndex={0}
-            type="text"
+            type={this.props.type}
           />
           {this.getChildren()}
         </div>

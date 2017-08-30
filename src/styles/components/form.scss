@@ -2,6 +2,7 @@
 .button {
   appearance: none;
   border-radius: $form--element--border-radius;
+  font-size: $font-size--medium;
   height: $form--element--height;
   outline: none;
   padding: $form--element--padding--y $form--element--padding--x;
@@ -33,7 +34,7 @@
 
     &__item {
       flex: 0 0 auto;
-      margin: 0 $space--x-small;
+      margin: 0 $spacing--x-small;
       min-width: 1px;
       position: relative;
       width: auto;
@@ -87,10 +88,24 @@
 
       .button,
       .checkbox,
-      .radio,
+      .form__element__wrapper,
       .input,
-      .form__element__wrapper {
+      .error,
+      .radio {
         width: 100%;
+      }
+
+      .error {
+        background: $red--alpha--light;
+        border: 1px solid $red--alpha--medium;
+        border-radius: $border-radius--small;
+        color: $red;
+        padding: $form--element--padding--x * 2/3 $form--element--padding--x;
+        transition: opacity $speed--x-fast;
+
+        &--is-loading {
+          opacity: 0.4;
+        }
       }
     }
   }
@@ -101,7 +116,7 @@
       display: block;
       font-size: $font-size--x-small;
       line-height: 1rem;
-      margin-bottom: $space--xx-small;
+      margin-bottom: $spacing--xx-small;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -112,7 +127,7 @@
     }
 
     &--label-offset {
-      margin-top: calc(#{$space--xx-small} + 1rem);
+      margin-top: calc(#{$spacing--xx-small} + 1rem);
     }
 
     &--match-textbox-height {

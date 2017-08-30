@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 
 import Button from 'flood-ui-kit/components/Button';
 import Checkbox from 'flood-ui-kit/components/Checkbox';
 import Container from 'flood-ui-kit/components/Container';
 import Form from 'flood-ui-kit/components/Form';
 import FormElementAddon from 'flood-ui-kit/components/FormElementAddon';
+import FormError from 'flood-ui-kit/components/FormError';
 import FormGroup from 'flood-ui-kit/components/FormGroup';
 import FormRow from 'flood-ui-kit/components/FormRow';
 import Radio from 'flood-ui-kit/components/Radio';
@@ -16,7 +17,6 @@ import Textbox from 'flood-ui-kit/components/Textbox';
 import Section from '../components/Section';
 
 const CustomTriggerComponent = (props) => {
-  console.log(props);
   return (
     <div onClick={props.onClick} ref={props.triggerRef}>\/</div>
   );
@@ -30,8 +30,8 @@ class TextBoxesView extends Component {
   render() {
     return (
       <Container>
-        <Form onSubmit={this.handleFormSubmit}>
-          <Section title="Textboxes">
+        <Section title="Textboxes">
+          <Form onSubmit={this.handleFormSubmit}>
             <p className="copy--lead">
               Donec sit amet metus vulputate, eleifend purus nec, auctor nisl. Donec accumsan sem in cursus laoreet. Curabitur egestas mauris odio, et fringilla mi pellentesque quis. In egestas enim tincidunt posuere fringilla.  Sed faucibus felis at dapibus ultricies. Nullam ante augue, dapibus eu malesuada sed, ornare non diam. Mauris tincidunt nec nibh ut mollis. Phasellus et libero eu lacus convallis consectetur vitae vitae nisi. In dictum, mauris ac laoreet pretium, dui dolor mollis sapien, ut condimentum odio odio in est.
             </p>
@@ -47,8 +47,10 @@ class TextBoxesView extends Component {
                 </FormElementAddon>
               </Textbox>
             </FormRow>
-          </Section>
-          <Section title="Checkboxes">
+          </Form>
+        </Section>
+        <Section title="Checkboxes">
+          <Form onSubmit={this.handleFormSubmit}>
             <FormRow>
               <Checkbox id="checkbox--a" grow={false}>Foo</Checkbox>
               <Checkbox id="checkbox--b" grow={false}>Foo</Checkbox>
@@ -57,8 +59,10 @@ class TextBoxesView extends Component {
               <Radio groupID="radio-group" id="radio--b" grow={false}>Foo</Radio>
               <Radio groupID="radio-group" id="radio--c" grow={false}>Foo</Radio>
             </FormRow>
-          </Section>
-          <Section title="Select Elements">
+          </Form>
+        </Section>
+        <Section title="Select Elements">
+          <Form onSubmit={this.handleFormSubmit}>
             <p className="copy--lead">
               <code>Select</code> components display a toggleable list of child <code>SelectItem</code> components.
             </p>
@@ -102,9 +106,11 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-          </Section>
-          <Section title="Form Composition">
-            <FormRow wrap>
+          </Form>
+        </Section>
+        <Section title="Form Composition">
+          <Form onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
+            <FormRow>
               <Textbox label="Textbox Label" placeholder="Placeholder" id="another-example" width="one-quarter" />
               <Checkbox id="checkbox-a" labelOffset matchTextboxHeight width="auto">
                 Checkbox
@@ -124,7 +130,7 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-            <FormRow wrap>
+            <FormRow>
               <Textbox label="Textbox Label" id="foo-example" width="one-half" />
               <Checkbox id="my-checkbox" labelOffset matchTextboxHeight width="auto">
                 Something Something...
@@ -144,7 +150,51 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-            <FormRow wrap>
+            <FormRow>
+              <FormGroup label="Form Group Label">
+                <FormRow>
+                  <Radio groupID="radio-group" id="radio-id-a" matchTextboxHeight value="a" width="auto">
+                    Radio A
+                  </Radio>
+                  <Radio groupID="radio-group" id="radio-id-b" matchTextboxHeight value="b" width="auto">
+                    Radio B
+                  </Radio>
+                  <Radio groupID="radio-group" id="radio-id-c" matchTextboxHeight value="c" width="auto">
+                    Radio C
+                  </Radio>
+                </FormRow>
+              </FormGroup>
+              <Select id="more-items" labelOffset width="one-half">
+                <SelectItem id="more-placeholder" placeholder>Please Select an Item</SelectItem>
+                <SelectItem id="foo">Foo</SelectItem>
+                <SelectItem id="bar">Bar</SelectItem>
+                <SelectItem id="baz">Baz</SelectItem>
+                <SelectItem id="qux">Qux</SelectItem>
+                <SelectItem id="quux">Quux</SelectItem>
+                <SelectItem id="quuz">Quuz</SelectItem>
+                <SelectItem id="corge">Corge</SelectItem>
+                <SelectItem id="grault">Grault</SelectItem>
+                <SelectItem id="garply">Garply</SelectItem>
+                <SelectItem id="waldo">Waldo</SelectItem>
+                <SelectItem id="fred">Fred</SelectItem>
+              </Select>
+              <Button labelOffset priority="secondary" width="auto" onClick={() => this.formRef.resetForm()}>
+                Reset
+              </Button>
+              <Button labelOffset priority="primary" type="submit" width="auto">
+                Submit
+              </Button>
+            </FormRow>
+          </Form>
+        </Section>
+        <Section title="Forms With Errors">
+          <Form onChange={({formData}) => console.log(formData)} onSubmit={this.handleFormSubmit}>
+            <FormRow>
+              <FormError>
+                This is an error!
+              </FormError>
+            </FormRow>
+            <FormRow>
               <FormGroup label="Form Group Label">
                 <FormRow>
                   <Radio groupID="radio-group" id="radio-id-a" matchTextboxHeight value="a" width="auto">
@@ -176,9 +226,16 @@ class TextBoxesView extends Component {
                 Submit
               </Button>
             </FormRow>
-          </Section>
-          <Section title="Inverse Styles" inverse padded>
-            <FormRow wrap>
+          </Form>
+        </Section>
+        <Section title="Inverse Styles" inverse padded>
+          <Form onSubmit={this.handleFormSubmit}>
+            <FormRow>
+              <FormError>
+                This is an error!
+              </FormError>
+            </FormRow>
+            <FormRow>
               <Textbox label="Textbox Label" placeholder="Placeholder" id="another-example" width="one-quarter" />
               <Checkbox id="apply-inverse-styling" labelOffset matchTextboxHeight width="auto">
                 Apply inverse styling
@@ -198,7 +255,7 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-            <FormRow wrap>
+            <FormRow>
               <Textbox label="Textbox Label" id="inverse-textbox" width="one-half" />
               <Checkbox id="inverse-something" labelOffset matchTextboxHeight width="auto">
                 Something Something...
@@ -218,7 +275,7 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-            <FormRow wrap>
+            <FormRow>
               <FormGroup label="Form Group Label">
                 <FormRow>
                   <Radio groupID="radio-group" id="radio-id-a" matchTextboxHeight value="a" width="auto">
@@ -255,8 +312,8 @@ class TextBoxesView extends Component {
                 Submit
               </Button>
             </FormRow>
-          </Section>
-        </Form>
+          </Form>
+        </Section>
       </Container>
     );
   }

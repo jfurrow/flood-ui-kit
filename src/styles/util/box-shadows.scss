@@ -5,8 +5,16 @@
 
 @function form--element--box-shadow--active($color) {
   @return form--element--box-shadow($color),
-    0 0 0 2px rgba($color, 0.2),
     0 0 0 1px rgba($color, 1);
+}
+
+@function form--element--inverse--box-shadow--active($color) {
+  @return 0 0 0 2px rgba($color, 0.4);
+}
+
+@function form--element--box-shadow--active--slim($color) {
+  @return form--element--box-shadow($color),
+    0 0 0 2px rgba($color, 0.2);
 }
 
 @function form--element--box-shadow--active--smaller($color) {

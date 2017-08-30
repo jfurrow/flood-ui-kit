@@ -1,10 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-const slugify = string => string.toLowerCase().replace(/\s/, '-');
-
 const Section = props => {
-  const classes = classnames('section', slugify(props.title), {
+  const classes = classnames('section', {
     'inverse': props.inverse,
     'padded': props.padded
   });

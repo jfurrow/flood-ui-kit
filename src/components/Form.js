@@ -1,18 +1,39 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
-import {getDataFromForm} from './util/forms';
+import {getDataFromForm, resetFormData} from './util/forms';
 
 class Form extends Component {
   static propTypes = {
+    appendErrors: PropTypes.bool,
     children: PropTypes.node,
     onChange: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    prependErrors: PropTypes.bool
+  };
+
+  formRef = null;
+
+  componentDidMount() {
+    this.formRef.addEventListener('flood-form-change', this.handleFormChange);
+  }
+
+  componentWillUnmount() {
+   this.formRef.removeEventListener('flood-form-change', this.handleFormChange);
+  }
+
+  getFormData = () => {
+    return getDataFromForm(this.formRef);
+  };
+
+  resetForm = () => {
+    resetFormData(this.formRef);
   };
 
   handleFormChange = event => {
     if (this.props.onChange) {
-      this.props.onChange(event);
+      const formData = getDataFromForm(this.formRef);
+      this.props.onChange({event, formData});
     }
   };
 
@@ -29,7 +50,9 @@ class Form extends Component {
     return (
       <form
         onChange={this.handleFormChange}
-        onSubmit={this.handleFormSubmit}>
+        onInput={this.handleFormChange}
+        onSubmit={this.handleFormSubmit}
+        ref={(ref) => this.formRef = ref}>
         {this.props.children}
       </form>
     );
