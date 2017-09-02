@@ -6,10 +6,18 @@
 
       &--placed-before {
         padding-left: $button--has-addon--padding--left;
+
+        &.form__element--has-addon--count-2 {
+          padding-left: $button--has-two-addons--padding--left;
+        }
       }
 
       &--placed-after {
         padding-right: $button--has-addon--padding--right;
+
+        &.form__element--has-addon--count-2 {
+          padding-right: $button--has-two-addons--padding--right;
+        }
       }
     }
 
@@ -27,8 +35,8 @@
         border-color: $darkest-grey--darker;
       }
 
-      :focus + &,
-      :active + & {
+      :focus ~ &,
+      :active ~ & {
         border-color: rgba($blue, 0.15);
         transition: all $speed--xx-fast;
 
@@ -44,6 +52,7 @@
       }
 
       .icon {
+        @extend .icon--small;
         fill: $grey;
         position: absolute;
         left: 50%;
@@ -61,11 +70,19 @@
       &--placed-before {
         border-right-width: 1px;
         left: 0;
+
+        &.form__element__addon--index-2 {
+          left: $button--addon--width;
+        }
       }
 
       &--placed-after {
         border-left-width: 1px;
         right: 0;
+
+        &.form__element__addon--index-2 {
+          right: $button--addon--width;
+        }
       }
 
       &--is-icon {
@@ -73,7 +90,16 @@
       }
 
       &--is-interactive {
-        pointer-events: normal;
+        cursor: pointer;
+        pointer-events: auto;
+
+        &:hover {
+
+          .icon {
+            fill: $blue;
+            transition: all $speed--xx-fast;
+          }
+        }
       }
     }
   }

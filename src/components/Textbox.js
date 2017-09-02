@@ -17,16 +17,6 @@ export default class Textbox extends Component {
     type: 'text'
   };
 
-  getChildren() {
-    return React.Children.map(this.props.children, (child, index) => {
-      if (child.type === FormElementAddon) {
-        return React.cloneElement(child, {addonPlacement: this.props.addonPlacement});
-      }
-
-      return child;
-    });
-  }
-
   getLabel() {
     if (this.props.label) {
       return (
@@ -38,8 +28,25 @@ export default class Textbox extends Component {
   }
 
   render() {
+    let addonCount = 0;
+    const children = React.Children.map(this.props.children, (child, index) => {
+      if (child && child.type === FormElementAddon) {
+        addonCount++;
+        return React.cloneElement(
+          child,
+          {
+            addonIndex: addonCount,
+            addonPlacement: this.props.addonPlacement
+          }
+        );
+      }
+
+      return child;
+    });
+
     const classes = classnames('input input--text form__element', {
       [`form__element--has-addon--placed-${this.props.addonPlacement}`]: this.props.addonPlacement && this.props.children,
+      [`form__element--has-addon--count-${addonCount}`]: addonCount > 0,
       'form__element--label-offset': this.props.labelOffset
     });
 
@@ -54,7 +61,7 @@ export default class Textbox extends Component {
             tabIndex={0}
             type={this.props.type}
           />
-          {this.getChildren()}
+          {children}
         </div>
       </FormRowItem>
     );
