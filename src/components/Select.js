@@ -8,10 +8,7 @@ import {dispatchChangeEvent} from './util/forms';
 import FormElementAddon from './FormElementAddon';
 import Chevron from '../icons/Chevron';
 import FormRowItem from './FormRowItem';
-import Overlay from './Overlay';
 import Portal from './Portal';
-
-const minPreferableBottomSpace = 150;
 
 export default class Select extends Component {
   static propTypes = {
@@ -19,8 +16,6 @@ export default class Select extends Component {
     value: PropTypes.string,
     children: PropTypes.node,
     id: PropTypes.string.isRequired,
-    matchTriggerWidth: PropTypes.bool,
-    menuAlign: PropTypes.oneOf(['left', 'right']),
     onClose: PropTypes.func,
     onOpen: PropTypes.func,
     onSelect: PropTypes.func
@@ -28,8 +23,6 @@ export default class Select extends Component {
 
   static defaultProps = {
     defaultID: '',
-    matchTriggerWidth: true,
-    menuAlign: 'left',
     persistentPlaceholder: false,
     priority: 'quaternary'
   };
@@ -74,7 +67,7 @@ export default class Select extends Component {
   }
 
   getItemList(children) {
-    const selectItems = children.reduce(
+    return children.reduce(
       (accumulator, child) => {
         if (child.props.placeholder) {
           return accumulator;
@@ -94,54 +87,6 @@ export default class Select extends Component {
       },
       []
     );
-
-    const dropdownStyle = {};
-    let shouldRenderAbove = false;
-
-    if (this.triggerRef) {
-      const buttonBoundingRect = this.triggerRef.getBoundingClientRect();
-      const windowHeight = global.innerHeight;
-
-      shouldRenderAbove = (
-        windowHeight - buttonBoundingRect.bottom < minPreferableBottomSpace
-        && buttonBoundingRect.top > (windowHeight - buttonBoundingRect.bottom)
-      );
-
-      if (shouldRenderAbove) {
-        // More room on top
-        dropdownStyle.top = 'auto';
-        dropdownStyle.bottom = (windowHeight - buttonBoundingRect.bottom) + buttonBoundingRect.height + 5;
-        dropdownStyle.maxHeight = buttonBoundingRect.top - 10;
-      } else {
-        dropdownStyle.top = buttonBoundingRect.bottom + 5;
-        dropdownStyle.maxHeight = global.innerHeight - buttonBoundingRect.bottom - 10;
-      }
-
-      if (this.props.matchTriggerWidth) {
-        dropdownStyle.width = buttonBoundingRect.width;
-        dropdownStyle.left = buttonBoundingRect.left;
-        dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
-      } else if (this.props.menuAlign === 'right') {
-        dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
-      } else {
-        dropdownStyle.left = buttonBoundingRect.left;
-      }
-    }
-
-    const classes = classnames('select__items', {
-      'select__items--is-up': shouldRenderAbove,
-      'select__items--is-down': !shouldRenderAbove,
-      'select__items--match-trigger-width': this.props.matchTriggerWidth
-    });
-
-    return (
-      <div>
-        <Overlay additionalClassNames="select__overlay" onClick={this.handleOverlayClick} isTransparent />
-        <div className={classes} ref={(ref) => this.menuRef = ref} style={dropdownStyle}>
-          {selectItems}
-        </div>
-      </div>
-    );
   }
 
   getLabel() {
@@ -155,23 +100,31 @@ export default class Select extends Component {
   }
 
   getSelectedItem(children) {
-    return children.filter(child => {
-      if (this.props.persistentPlaceholder || !this.state.selectedID) {
-        return child.props.placeholder;
-      }
-
-      return child.props.id === this.state.selectedID;
+    const selectedItem = children.find(child => {
+      return (
+        (this.props.persistentPlaceholder || !this.state.selectedID)
+        || child.props.id === this.state.selectedID
+      );
     });
+
+    if (selectedItem) {
+      return React.cloneElement(selectedItem, {isTrigger: true});
+    }
   }
 
   getTrigger(selectItems) {
+    const selectedItem = this.getSelectedItem(selectItems);
+
+    console.log(selectedItem);
+
     if (this.props.triggerComponent) {
       return (
         <this.props.triggerComponent
           isOpen={this.state.isOpen}
           onClick={this.handleTriggerClick}
-          triggerRef={ref => this.triggerRef = ref}>
-          {this.getSelectedItem(selectItems)}
+          setRef={this.setTriggerRef}
+        >
+          {selectedItem}
         </this.props.triggerComponent>
       );
     }
@@ -179,7 +132,7 @@ export default class Select extends Component {
     return (
       <Button
         additionalClassNames="select__button"
-        buttonRef={ref => this.triggerRef = ref}
+        buttonRef={this.setTriggerRef}
         addonPlacement="after"
         onClick={this.handleTriggerClick}
         priority={this.props.priority}
@@ -187,7 +140,7 @@ export default class Select extends Component {
         <FormElementAddon className="select__indicator">
           <Chevron />
         </FormElementAddon>
-        {this.getSelectedItem(selectItems)}
+        {selectedItem}
       </Button>
     );
   }
@@ -228,6 +181,12 @@ export default class Select extends Component {
     }
   };
 
+  setTriggerRef = (ref) => {
+    if (this.state.triggerRef !== ref) {
+      this.setState({triggerRef: ref});
+    }
+  };
+
   toggleOpenState = () => {
     this.setState({
       isOpen: !this.state.isOpen
@@ -246,7 +205,12 @@ export default class Select extends Component {
     );
 
     return (
-      <FormRowItem shrink={this.props.shrink} grow={this.props.grow} labelOffset={this.props.labelOffset} width={this.props.width}>
+      <FormRowItem
+        shrink={this.props.shrink}
+        grow={this.props.grow}
+        labelOffset={this.props.labelOffset}
+        width={this.props.width}
+      >
         {this.getLabel()}
         <div className={classes}>
           <input
@@ -254,12 +218,19 @@ export default class Select extends Component {
             name={this.props.id}
             onChange={(event) => {console.log(event)}}
             tabIndex={-1}
-            ref={(ref) => this.inputRef = ref}
+            ref={ref => this.inputRef = ref}
             type="text"
             value={this.state.selectedID} />
           {this.getTrigger(selectItems)}
           <Portal>
-            <ContextMenu in={this.state.isOpen}>
+            <ContextMenu
+              onOverlayClick={this.handleOverlayClick}
+              in={this.state.isOpen}
+              matchTriggerWidth={this.props.matchTriggerWidth}
+              menuAlign={this.props.menuAlign}
+              setRef={ref => this.menuRef = ref}
+              triggerRef={this.state.triggerRef}
+            >
               {this.getItemList(selectItems)}
             </ContextMenu>
           </Portal>

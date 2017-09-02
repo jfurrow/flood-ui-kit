@@ -1,6 +1,7 @@
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Container from './components/Container';
+import ContextMenu from './components/ContextMenu';
 import Form from './components/Form';
 import FormElementAddon from './components/FormElementAddon';
 import FormError from './components/FormError';
@@ -24,6 +25,7 @@ import TransitionGroup from './components/TransitionGroup';
 export {Button};
 export {Checkbox};
 export {Container};
+export {ContextMenu};
 export {Form};
 export {FormElementAddon};
 export {FormError};

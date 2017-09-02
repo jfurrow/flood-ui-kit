@@ -18,7 +18,7 @@ import Section from '../components/Section';
 
 const CustomTriggerComponent = (props) => {
   return (
-    <div onClick={props.onClick} ref={props.triggerRef}>\/</div>
+    <div onClick={props.onClick} ref={props.setRef}>\/</div>
   );
 };
 

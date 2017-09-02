@@ -11,16 +11,18 @@ class Portal extends React.Component {
     children: PropTypes.node
   };
 
+  mountPoint = null;
+
   componentDidMount() {
-    this._nodeEl = global.document.createElement('div');
-    this._nodeEl.classList.add('portal')
-    global.document.body.appendChild(this._nodeEl);
+    this.mountPoint = global.document.createElement('div');
+    this.mountPoint.classList.add('portal')
+    global.document.body.appendChild(this.mountPoint);
     this.renderChildren(this.props);
   }
 
   componentWillUnmount() {
-    ReactDOM.unmountComponentAtNode(this._nodeEl);
-    global.document.body.removeChild(this._nodeEl);
+    ReactDOM.unmountComponentAtNode(this.mountPoint);
+    global.document.body.removeChild(this.mountPoint);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,7 +30,7 @@ class Portal extends React.Component {
   }
 
   renderChildren(props) {
-    ReactDOM.render(props.children, this._nodeEl);
+    ReactDOM.render(props.children, this.mountPoint);
   }
 
   render() {

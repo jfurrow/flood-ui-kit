@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
 import Checkmark from '../icons/Checkmark';
+import ContextMenuItem from './ContextMenuItem';
 
 export default class SelectItem extends Component {
   static propTypes = {
     isSelected: PropTypes.bool,
+    isTrigger: PropTypes.bool,
     children: PropTypes.node
+  };
+
+  static defaultProps = {
+    isTrigger: false
   };
 
   handleClick = (event) => {
@@ -19,15 +25,22 @@ export default class SelectItem extends Component {
   };
 
   render() {
-    const classes = classnames('select__item', {
+    let icon = null;
+
+    if (!this.props.isTrigger && this.props.isSelected) {
+      icon = <Checkmark />;
+    }
+
+    const classes = classnames({
+      'select__item context-menu__item': !this.props.isTrigger,
       'select__item--is-selected': this.props.isSelected
     });
 
     return (
-      <div className={classes} onClick={this.handleClick}>
-        <Checkmark />
+      <ContextMenuItem className={classes} onClick={this.handleClick}>
+        {icon}
         {this.props.children}
-      </div>
+      </ContextMenuItem>
     );
   }
 }
