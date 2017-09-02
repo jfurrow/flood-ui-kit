@@ -49,6 +49,7 @@ class Form extends Component {
   render () {
     return (
       <form
+        className={this.props.className}
         onChange={this.handleFormChange}
         onInput={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
