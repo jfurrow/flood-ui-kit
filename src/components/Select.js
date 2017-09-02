@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
 import Button from './Button';
+import ContextMenu from './ContextMenu';
 import {dispatchChangeEvent} from './util/forms';
 import FormElementAddon from './FormElementAddon';
 import Chevron from '../icons/Chevron';
 import FormRowItem from './FormRowItem';
 import Overlay from './Overlay';
 import Portal from './Portal';
-import TransitionGroup from './TransitionGroup';
 
 const minPreferableBottomSpace = 150;
 
@@ -259,11 +259,9 @@ export default class Select extends Component {
             value={this.state.selectedID} />
           {this.getTrigger(selectItems)}
           <Portal>
-            <TransitionGroup in={this.state.isOpen} transitionName="select__menu">
-              <div className="select__menu">
-                {this.getItemList(selectItems)}
-              </div>
-            </TransitionGroup>
+            <ContextMenu in={this.state.isOpen}>
+              {this.getItemList(selectItems)}
+            </ContextMenu>
           </Portal>
         </div>
       </FormRowItem>
