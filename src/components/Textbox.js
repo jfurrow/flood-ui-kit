@@ -10,6 +10,7 @@ export default class Textbox extends Component {
     defaultValue: PropTypes.string,
     addonPlacement: PropTypes.oneOf(['before', 'after']),
     id: PropTypes.string.isRequired,
+    setRef: PropTypes.func,
     type: PropTypes.oneOf(['password', 'text'])
   };
 
@@ -58,6 +59,7 @@ export default class Textbox extends Component {
             defaultValue={this.props.defaultValue}
             placeholder={this.props.placeholder}
             name={this.props.id}
+            ref={this.props.setRef}
             tabIndex={0}
             type={this.props.type}
           />
