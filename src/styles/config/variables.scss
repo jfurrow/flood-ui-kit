@@ -1,8 +1,8 @@
 // Forms
 $form--element--border-radius: $border-radius--medium;
 $form--element--border-width: 1px;
-$form--element--height: 30px;
-$form--element--padding--x: $spacing--small;
+$form--element--height: 34px;
+$form--element--padding--x: $spacing--small + $spacing--xx-small;
 $form--element--padding--y: 0;
 $form__row--margin--vertical: $spacing--medium;
 
@@ -37,10 +37,10 @@ $input--inverse--foreground--placeholder: rgba($medium-grey, 0.25);
 $input--inverse--foreground--placeholder--hover: rgba($medium-grey, 0.4);
 
 $input--addon--width: $form--element--padding--x * 2 + $spacing--small + $form--element--border-width;
-$input--addon--padding--right: $input--addon--width + $spacing--x-small;
-$input--addon--padding--left: $input--addon--width + $spacing;
-$input--two-addons--padding--right: $input--addon--width * 2 + $spacing--x-small;
-$input--two-addons--padding--left: $input--addon--width * 2 + $spacing;
+$input--addon--padding--right: $input--addon--width + $form--element--padding--x / 2;
+$input--addon--padding--left: $input--addon--width + $form--element--padding--x / 2;
+$input--two-addons--padding--right: $input--addon--width * 2 + $form--element--padding--x / 2;
+$input--two-addons--padding--left: $input--addon--width * 2 + $form--element--padding--x / 2;
 
 // Button
 $button--addon--width: $input--addon--width;

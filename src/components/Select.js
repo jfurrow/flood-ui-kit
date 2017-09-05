@@ -115,8 +115,6 @@ export default class Select extends Component {
   getTrigger(selectItems) {
     const selectedItem = this.getSelectedItem(selectItems);
 
-    console.log(selectedItem);
-
     if (this.props.triggerComponent) {
       return (
         <this.props.triggerComponent
@@ -216,7 +214,6 @@ export default class Select extends Component {
           <input
             className="input input--hidden"
             name={this.props.id}
-            onChange={(event) => {console.log(event)}}
             tabIndex={-1}
             ref={ref => this.inputRef = ref}
             type="text"

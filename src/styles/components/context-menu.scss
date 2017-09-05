@@ -66,11 +66,15 @@
     max-width: 200px;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: $spacing--small 0;
     position: fixed;
     transform-origin: 50% -5px;
     transition: opacity $speed--xx-fast, transform $speed--xx-fast;
     z-index: 101;
+
+    &,
+    &__padding-surrogate {
+      padding: $spacing--small 0;
+    }
 
     &--is-up {
       transform-origin: 50% calc(100% + 5px);
@@ -78,6 +82,14 @@
 
     &--match-trigger-width {
       max-width: none;
+    }
+
+    &--no-padding {
+      padding: 0;
+    }
+
+    &--no-scrolling {
+      overflow: hidden;
     }
   }
 }

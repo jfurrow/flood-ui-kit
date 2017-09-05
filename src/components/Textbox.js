@@ -59,6 +59,8 @@ export default class Textbox extends Component {
             defaultValue={this.props.defaultValue}
             placeholder={this.props.placeholder}
             name={this.props.id}
+            onChange={this.props.onChange}
+            onClick={this.props.onClick}
             ref={this.props.setRef}
             tabIndex={0}
             type={this.props.type}

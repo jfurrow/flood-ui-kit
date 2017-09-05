@@ -25,6 +25,10 @@
       margin-bottom: 0;
     }
 
+    &--group {
+      flex-direction: column;
+    }
+
     &--justify {
 
       &--right {

@@ -12,12 +12,18 @@ export default class ContextMenu extends React.PureComponent {
     children: PropTypes.node,
     in: PropTypes.bool,
     matchTriggerWidth: PropTypes.bool,
-    menuAlign: PropTypes.oneOf(['left', 'right'])
+    menuAlign: PropTypes.oneOf(['left', 'right']),
+    overlayProps: PropTypes.object,
+    padding: PropTypes.bool,
+    scrolling: PropTypes.bool
   };
 
   static defaultProps = {
     matchTriggerWidth: true,
-    menuAlign: 'left'
+    menuAlign: 'left',
+    overlayProps: {},
+    padding: true,
+    scrolling: true
   };
 
   handleOverlayClick = () => {
@@ -57,18 +63,22 @@ export default class ContextMenu extends React.PureComponent {
       } else {
         dropdownStyle.left = buttonBoundingRect.left;
       }
+
+      this.dropdownStyle = dropdownStyle;
     }
 
     const classes = classnames('context-menu__items', {
       'context-menu__items--is-up': shouldRenderAbove,
       'context-menu__items--is-down': !shouldRenderAbove,
-      'context-menu__items--match-trigger-width': this.props.matchTriggerWidth
+      'context-menu__items--match-trigger-width': this.props.matchTriggerWidth,
+      'context-menu__items--no-padding': !this.props.padding,
+      'context-menu__items--no-scrolling': !this.props.scrolling
     });
 
     return (
       <TransitionGroup in={this.props.in} transitionName="context-menu">
-        <div className="context-menu">
-          <Overlay additionalClassNames="context-menu__overlay" onClick={this.handleOverlayClick} isTransparent />
+        <div className="context-menu" onClick={this.props.onClick}>
+          <Overlay additionalClassNames="context-menu__overlay" onClick={this.handleOverlayClick} isTransparent {...this.props.overlayProps} />
           <div className={classes} ref={this.props.setRef} style={dropdownStyle}>
             {this.props.children}
           </div>

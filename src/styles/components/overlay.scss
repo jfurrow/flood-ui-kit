@@ -10,4 +10,8 @@
   &--transparent {
     background: transparent;
   }
+
+  &--no-interaction {
+    pointer-events: none;
+  }
 }
