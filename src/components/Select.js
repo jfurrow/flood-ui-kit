@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -36,7 +37,7 @@ export default class Select extends Component {
 
     this.state = {
       isOpen: false,
-      selectedID: props.defaultID
+      selectedID: props.defaultID || (props.children[0] && props.children[0].props.id)
     };
   }
 
@@ -100,9 +101,12 @@ export default class Select extends Component {
   }
 
   getSelectedItem(children) {
-    const selectedItem = children.find(child => {
+    const selectedItem = children.find((child, index) => {
       return (
-        (this.props.persistentPlaceholder || !this.state.selectedID)
+        (
+          (this.props.persistentPlaceholder && child.props.placeholder)
+          || (!this.state.selectedID && index === 0)
+        )
         || child.props.id === this.state.selectedID
       );
     });
@@ -144,7 +148,9 @@ export default class Select extends Component {
   }
 
   handleTriggerClick = () => {
-    this.toggleOpenState();
+    if (!this.props.disabled) {
+      this.toggleOpenState();
+    }
   };
 
   handleItemClick = id => {
@@ -197,6 +203,7 @@ export default class Select extends Component {
       'select form__element',
       this.props.additionalClassNames,
       {
+        'form__element--disabled': this.props.disabled,
         'form__element--label-offset': this.props.labelOffset,
         'select--is-open': this.state.isOpen
       }
@@ -214,6 +221,7 @@ export default class Select extends Component {
           <input
             className="input input--hidden"
             name={this.props.id}
+            onChange={_.noop}
             tabIndex={-1}
             ref={ref => this.inputRef = ref}
             type="text"
