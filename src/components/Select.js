@@ -37,7 +37,7 @@ export default class Select extends Component {
 
     this.state = {
       isOpen: false,
-      selectedID: props.defaultID || (props.children[0] && props.children[0].props.id)
+      selectedID: this.getInitialSelectedID(props)
     };
   }
 
@@ -65,6 +65,10 @@ export default class Select extends Component {
         this.props.onClose();
       }
     }
+  }
+
+  getInitialSelectedID(props) {
+    return props.defaultID || props.children.find(child => child.id != null) || '';
   }
 
   getItemList(children) {
@@ -221,7 +225,6 @@ export default class Select extends Component {
           <input
             className="input input--hidden"
             name={this.props.id}
-            onChange={_.noop}
             tabIndex={-1}
             ref={ref => this.inputRef = ref}
             type="text"
