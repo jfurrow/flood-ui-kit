@@ -6,6 +6,7 @@ import Overlay from './Overlay';
 import TransitionGroup from './TransitionGroup';
 
 const minPreferableBottomSpace = 150;
+const minPreferableHorizontalSpace = 200;
 
 export default class ContextMenu extends React.PureComponent {
   static propTypes = {
@@ -15,7 +16,11 @@ export default class ContextMenu extends React.PureComponent {
     menuAlign: PropTypes.oneOf(['left', 'right']),
     overlayProps: PropTypes.object,
     padding: PropTypes.bool,
-    scrolling: PropTypes.bool
+    scrolling: PropTypes.bool,
+    triggerCoordinates: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired
+    })
   };
 
   static defaultProps = {
@@ -39,19 +44,18 @@ export default class ContextMenu extends React.PureComponent {
     if (this.props.triggerRef) {
       const buttonBoundingRect = this.props.triggerRef.getBoundingClientRect();
       const windowHeight = global.innerHeight;
+      const spaceAbove = buttonBoundingRect.top;
+      const spaceBelow = windowHeight - buttonBoundingRect.bottom;
 
-      shouldRenderAbove = (
-        windowHeight - buttonBoundingRect.bottom < minPreferableBottomSpace
-        && buttonBoundingRect.top > (windowHeight - buttonBoundingRect.bottom)
-      );
+      shouldRenderAbove = spaceBelow < minPreferableBottomSpace && spaceAbove > spaceBelow;
 
       if (shouldRenderAbove) {
         dropdownStyle.top = 'auto';
-        dropdownStyle.bottom = (windowHeight - buttonBoundingRect.bottom) + buttonBoundingRect.height + 5;
+        dropdownStyle.bottom = spaceBelow + buttonBoundingRect.height + 5;
         dropdownStyle.maxHeight = buttonBoundingRect.top - 10;
       } else {
         dropdownStyle.top = buttonBoundingRect.bottom + 5;
-        dropdownStyle.maxHeight = global.innerHeight - buttonBoundingRect.bottom - 10;
+        dropdownStyle.maxHeight = spaceBelow - 10;
       }
 
       if (this.props.matchTriggerWidth) {
@@ -62,6 +66,33 @@ export default class ContextMenu extends React.PureComponent {
         dropdownStyle.right = global.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
       } else {
         dropdownStyle.left = buttonBoundingRect.left;
+      }
+
+      this.dropdownStyle = dropdownStyle;
+    } else if (this.props.triggerCoordinates) {
+      const windowHeight = global.innerHeight;
+      const windowWidth = global.innerWidth;
+      const spaceAbove = this.props.triggerCoordinates.y;
+      const spaceBelow = windowHeight - spaceAbove;
+
+      shouldRenderAbove = spaceBelow < minPreferableBottomSpace && spaceAbove > spaceBelow;
+
+      if (shouldRenderAbove) {
+        dropdownStyle.top = 'auto';
+        dropdownStyle.bottom = spaceAbove;
+        dropdownStyle.maxHeight = spaceAbove - 10;
+      } else {
+        dropdownStyle.top = spaceAbove;
+        dropdownStyle.maxHeight = spaceBelow - 10;
+      }
+
+      if (
+        this.props.menuAlign === 'right'
+        || windowWidth - this.props.triggerCoordinates.x < minPreferableHorizontalSpace
+      ) {
+        dropdownStyle.right = windowWidth - this.props.triggerCoordinates.x;
+      } else {
+        dropdownStyle.left = this.props.triggerCoordinates.x;
       }
 
       this.dropdownStyle = dropdownStyle;
