@@ -46,6 +46,8 @@ class Form extends Component {
     }
   };
 
+  setFormRef = ref => this.formRef = ref;
+
   render () {
     return (
       <form
@@ -53,7 +55,7 @@ class Form extends Component {
         onChange={this.handleFormChange}
         onInput={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={(ref) => this.formRef = ref}>
+        ref={this.setFormRef}>
         {this.props.children}
       </form>
     );

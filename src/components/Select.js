@@ -189,7 +189,11 @@ export default class Select extends Component {
     }
   };
 
-  setTriggerRef = (ref) => {
+  setInputRef = ref => this.inputRef = ref;
+
+  setMenuRef = ref => this.menuRef = ref;
+
+  setTriggerRef = ref => {
     if (this.state.triggerRef !== ref) {
       this.setState({triggerRef: ref});
     }
@@ -226,7 +230,7 @@ export default class Select extends Component {
             className="input input--hidden"
             name={this.props.id}
             tabIndex={-1}
-            ref={ref => this.inputRef = ref}
+            ref={this.setInputRef}
             type="text"
             value={this.state.selectedID} />
           {this.getTrigger(selectItems)}
@@ -236,7 +240,7 @@ export default class Select extends Component {
               in={this.state.isOpen}
               matchTriggerWidth={this.props.matchTriggerWidth}
               menuAlign={this.props.menuAlign}
-              setRef={ref => this.menuRef = ref}
+              setRef={this.setMenuRef}
               triggerRef={this.state.triggerRef}
             >
               {this.getItemList(selectItems)}

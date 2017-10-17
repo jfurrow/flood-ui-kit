@@ -27,12 +27,10 @@ class ToggleInput extends Component {
     this.initialValue = props.checked;
   }
 
-  elementRef = null;
+  inputRef = null;
   state = {isActive: false};
 
-  handleInputChange = event => {
-    event.stopPropagation();
-  };
+  handleInputChange = event => event.stopPropagation();
 
   handleKeyDown = event => {
     if (event.key === ' ' || event.key === 'Enter') {
@@ -45,9 +43,9 @@ class ToggleInput extends Component {
 
   handleKeyUp = event => {
     if (event.key === ' ' || event.key === 'Enter') {
-      this.elementRef.checked = !this.elementRef.checked;
+      this.inputRef.checked = !this.inputRef.checked;
       // We're faking the event's target to make it easier to handle this keyboard event.
-      this.triggerChangeEvent({event, target: this.elementRef});
+      this.triggerChangeEvent({event, target: this.inputRef});
     }
 
     if (this.state.isActive) {
@@ -69,8 +67,10 @@ class ToggleInput extends Component {
     global.addEventListener('keyup', this.handleKeyUp);
   };
 
+  setInputRef = ref => this.inputRef = ref;
+
   triggerChangeEvent = event => {
-    dispatchChangeEvent(this.elementRef);
+    dispatchChangeEvent(this.inputRef);
     this.props.onChange(event);
   };
 
@@ -88,13 +88,13 @@ class ToggleInput extends Component {
           onFocus={this.handleLabelFocus}
           tabIndex={0}>
           <input
-            data-default-value={this.initialValue}
+            data-initial-value={this.initialValue}
             defaultChecked={this.props.checked}
             className="toggle-input__element"
             name={this.props.type === 'radio' ? this.props.groupID : this.props.id}
             onClick={this.triggerChangeEvent}
             onChange={this.handleInputChange}
-            ref={ref => this.elementRef = ref}
+            ref={this.setInputRef}
             type={this.props.type}
             value={this.props.type === 'radio' ? this.props.value : undefined}
           />

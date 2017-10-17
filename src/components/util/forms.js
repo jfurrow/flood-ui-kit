@@ -43,7 +43,7 @@ export const getDataFromForm = (form) => {
 export const resetFormData = (form) => {
   return Array.from(form.elements).forEach((element) => {
     // getAttribute is supposedly faster than using the dataset API.
-    const defaultValue = element.getAttribute('data-default-value');
+    const defaultValue = element.getAttribute('data-initial-value');
 
     if (element.type === 'checkbox' || element.type === 'radio') {
       if (defaultValue === 'true') {
