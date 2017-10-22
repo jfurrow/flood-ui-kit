@@ -3,6 +3,11 @@
     0 1px 2px rgba(darken($color, 10%), 0.8);
 }
 
+@function button--svg-shadow($color) {
+  @return drop-shadow(0 1px 0 darken($color, 5%))
+    drop-shadow(0 1px 2px rgba(darken($color, 10%), 0.8));
+}
+
 .button {
   border: $form--element--border-width solid currentColor;
   cursor: pointer;
@@ -56,6 +61,10 @@
         border-color: $blue;
       }
     }
+
+    svg {
+      filter: button--svg-shadow($blue--hard);
+    }
   }
 
   &--secondary {
@@ -97,6 +106,10 @@
         border-color: $green;
       }
     }
+
+    svg {
+      filter: button--svg-shadow($green--hard);
+    }
   }
 
   &--tertiary {
@@ -137,6 +150,10 @@
         background: $grey;
         border-color: $grey;
       }
+    }
+
+    svg {
+      filter: button--svg-shadow($grey--hard);
     }
   }
 
@@ -185,8 +202,13 @@
         background-color: rgba($blue--soft, 0.15);
       }
     }
+
+    svg {
+      filter: button--svg-shadow($grey--lighter);
+    }
   }
 
+  // TODO: Investiate this darker border.
   // &--primary,
   // &--secondary,
   // &--tertiary {
@@ -206,7 +228,6 @@
   //   }
   // }
 
-
   &--is-disabled {
     box-shadow: form--element--box-shadow($blue);
     color: $grey--light;
@@ -224,6 +245,8 @@
   }
 
   &__content {
+    align-items: center;
+    display: flex;
     opacity: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -232,6 +255,7 @@
   }
 
   .icon {
+    fill: currentColor;
 
     &--loading {
       left: 50%;

@@ -35,8 +35,8 @@
         border-color: $darkest-grey--darker;
       }
 
-      :focus ~ &,
-      :active ~ & {
+      .form__element:focus ~ &,
+      .form__element:active ~ & {
         border-color: rgba($blue, 0.15);
         transition: all $speed--xx-fast;
 

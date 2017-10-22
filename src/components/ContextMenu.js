@@ -18,8 +18,8 @@ export default class ContextMenu extends React.PureComponent {
     padding: PropTypes.bool,
     scrolling: PropTypes.bool,
     triggerCoordinates: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired
+      x: PropTypes.number,
+      y: PropTypes.number
     })
   };
 

@@ -304,7 +304,7 @@ class TextBoxesView extends Component {
                 <SelectItem id="fred">Fred</SelectItem>
               </Select>
             </FormRow>
-            <FormRow justify="right">
+            <FormRow justify="end">
               <Button priority="tertiary" width="auto">
                 Clear
               </Button>

@@ -8,11 +8,13 @@ import FormRowItem from './FormRowItem';
 class ToggleInput extends Component {
   static propTypes = {
     checked: PropTypes.bool,
-    children: PropTypes.string,
+    children: PropTypes.node,
     grow: PropTypes.bool,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     shrink: PropTypes.bool,
-    type: PropTypes.oneOf(['checkbox', 'radio'])
+    type: PropTypes.oneOf(['checkbox', 'radio']),
+    // Is the element controlled or not.
+    useProps: PropTypes.bool
   };
 
   static defaultProps = {
@@ -29,6 +31,26 @@ class ToggleInput extends Component {
 
   inputRef = null;
   state = {isActive: false};
+
+  getCheckedProp() {
+    // When element is controlled, we provide the checked prop.
+    if (this.props.useProps) {
+      return this.props.checked != null && this.props.checked;
+    }
+  }
+
+  getDefaultCheckedProp() {
+    // When element is uncontrolled, we provide the defaultChecked prop.
+    if (!this.props.useProps) {
+      return this.props.checked;
+    }
+  }
+
+  getValueProp() {
+    if (this.props.type === 'radio') {
+      return this.props.value;
+    }
+  }
 
   handleInputChange = event => event.stopPropagation();
 
@@ -89,14 +111,15 @@ class ToggleInput extends Component {
           tabIndex={0}>
           <input
             data-initial-value={this.initialValue}
-            defaultChecked={this.props.checked}
+            defaultChecked={this.getDefaultCheckedProp()}
+            checked={this.getCheckedProp()}
             className="toggle-input__element"
             name={this.props.type === 'radio' ? this.props.groupID : this.props.id}
             onClick={this.triggerChangeEvent}
             onChange={this.handleInputChange}
             ref={this.setInputRef}
             type={this.props.type}
-            value={this.props.type === 'radio' ? this.props.value : undefined}
+            value={this.getValueProp()}
           />
           <div className={`toggle-input__indicator`}>
             <div className={`toggle-input__indicator__icon`}>

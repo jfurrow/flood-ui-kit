@@ -19,6 +19,7 @@
   &__row {
     display: flex;
     margin-bottom: $form__row--margin--vertical;
+    width: 100%;
 
     &:last-child,
     &--no-margin {
@@ -29,9 +30,32 @@
       flex-direction: column;
     }
 
+    &--align {
+
+      &--start {
+        align-items: flex-start;
+      }
+
+      &--center {
+        align-items: center;
+      }
+
+      &--end {
+        align-items: flex-end;
+      }
+    }
+
     &--justify {
 
-      &--right {
+      &--start {
+        justify-content: flex-start;
+      }
+
+      &--center {
+        justify-content: center;
+      }
+
+      &--end {
         justify-content: flex-end;
       }
     }
@@ -55,7 +79,6 @@
 
       &--grow {
         flex-grow: 1;
-        width: 100%;
       }
 
       &--shrink {

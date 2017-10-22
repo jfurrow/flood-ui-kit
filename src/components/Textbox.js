@@ -7,9 +7,16 @@ import FormRowItem from './FormRowItem';
 
 export default class Textbox extends Component {
   static propTypes = {
-    defaultValue: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number,
+      PropTypes.string
+    ]),
     addonPlacement: PropTypes.oneOf(['before', 'after']),
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ]).isRequired,
     setRef: PropTypes.func,
     type: PropTypes.oneOf(['password', 'text'])
   };
@@ -45,17 +52,19 @@ export default class Textbox extends Component {
       return child;
     });
 
-    const classes = classnames('input input--text form__element', {
+    const inputClasses = classnames('input input--text form__element', {
       [`form__element--has-addon--placed-${this.props.addonPlacement}`]: this.props.addonPlacement && this.props.children,
       [`form__element--has-addon--count-${addonCount}`]: addonCount > 0,
       'form__element--label-offset': this.props.labelOffset
     });
+    const wrapperClasses = classnames('form__element__wrapper', this.props.wrapperClassName);
 
     return (
       <FormRowItem width={this.props.width}>
         {this.getLabel()}
-        <div className="form__element__wrapper">
-          <input className={classes}
+        <div className={wrapperClasses}>
+          <input
+            className={inputClasses}
             defaultValue={this.props.defaultValue}
             placeholder={this.props.placeholder}
             name={this.props.id}

@@ -13,10 +13,10 @@ import Portal from './Portal';
 
 export default class Select extends Component {
   static propTypes = {
-    defaultID: PropTypes.string,
+    defaultID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     value: PropTypes.string,
     children: PropTypes.node,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     onClose: PropTypes.func,
     onOpen: PropTypes.func,
     onSelect: PropTypes.func
@@ -229,6 +229,7 @@ export default class Select extends Component {
           <input
             className="input input--hidden"
             name={this.props.id}
+            onChange={_.noop}
             tabIndex={-1}
             ref={this.setInputRef}
             type="text"
