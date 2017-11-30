@@ -79,7 +79,7 @@ export default class ContextMenu extends React.PureComponent {
 
       if (shouldRenderAbove) {
         dropdownStyle.top = 'auto';
-        dropdownStyle.bottom = spaceAbove;
+        dropdownStyle.bottom = spaceBelow;
         dropdownStyle.maxHeight = spaceAbove - 10;
       } else {
         dropdownStyle.top = spaceAbove;
