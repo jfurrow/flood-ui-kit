@@ -13,6 +13,7 @@ import Search from 'flood-ui-kit/icons/Search';
 import Select from 'flood-ui-kit/components/Select';
 import SelectItem from 'flood-ui-kit/components/SelectItem';
 import Textbox from 'flood-ui-kit/components/Textbox';
+import Icon from 'flood-ui-kit/components/Icon';
 
 import Section from '../components/Section';
 
@@ -43,7 +44,7 @@ class TextBoxesView extends Component {
               <Textbox label="Label" placeholder="Placeholder" id="textbox--foo" width="one-quarter" />
               <Textbox label="Label" addonPlacement="before" id="textbox--bar">
                 <FormElementAddon>
-                  <Search />
+                  <Icon name="search" />
                 </FormElementAddon>
               </Textbox>
             </FormRow>
