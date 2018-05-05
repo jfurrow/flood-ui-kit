@@ -9,6 +9,8 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
+const SVGCompilerPlugin = require('./svg-compiler-plugin');
+
 // Get environment variables to inject into our app.
 const env = getClientEnvironment();
 
@@ -117,6 +119,7 @@ module.exports = {
         exclude: [
           /\.(js|jsx)$/,
           /\.json$/,
+          // /\.svg$/,
         ],
         loader: require.resolve('file-loader'),
         options: {
@@ -134,6 +137,11 @@ module.exports = {
       },
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "file" loader exclusion list.
+      // {
+      //   test: /\.svg$/,
+      //   include: paths.appSrc,
+      //   loader: require.resolve('svg-sprite-loader'),
+      // },
     ],
   },
   plugins: [
@@ -141,7 +149,8 @@ module.exports = {
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
-    new webpack.DefinePlugin(env.stringified)
+    new webpack.DefinePlugin(env.stringified),
+    new SVGCompilerPlugin({ baseDir: './src/svg'}),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
