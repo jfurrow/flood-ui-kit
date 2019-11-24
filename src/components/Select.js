@@ -1,15 +1,15 @@
-import _ from 'lodash';
-import classnames from 'classnames';
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import _ from "lodash";
+import classnames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import Button from './Button';
-import ContextMenu from './ContextMenu';
-import {dispatchChangeEvent} from './util/forms';
-import FormElementAddon from './FormElementAddon';
-import Chevron from '../icons/Chevron';
-import FormRowItem from './FormRowItem';
-import Portal from './Portal';
+import Button from "./Button";
+import ContextMenu from "./ContextMenu";
+import { dispatchChangeEvent } from "./util/forms";
+import FormElementAddon from "./FormElementAddon";
+import Chevron from "../icons/Chevron";
+import FormRowItem from "./FormRowItem";
+import Portal from "./Portal";
 
 export default class Select extends Component {
   static propTypes = {
@@ -23,9 +23,9 @@ export default class Select extends Component {
   };
 
   static defaultProps = {
-    defaultID: '',
+    defaultID: "",
     persistentPlaceholder: false,
-    priority: 'quaternary'
+    priority: "quaternary"
   };
 
   menuRef = null;
@@ -47,19 +47,21 @@ export default class Select extends Component {
     } else if (prevState.isOpen && !this.state.isOpen) {
       // this.triggerRef.focus();
     }
-  }
 
-  componentWillUpdate(_nextProps, nextState) {
-    if (nextState.isOpen && !this.state.isOpen) {
-      global.addEventListener('keydown', this.handleKeyDown);
-      global.addEventListener('scroll', this.handleWindowScroll, {capture: true});
+    if (this.state.isOpen && !prevState.isOpen) {
+      global.addEventListener("keydown", this.handleKeyDown);
+      global.addEventListener("scroll", this.handleWindowScroll, {
+        capture: true
+      });
 
       if (this.props.onOpen) {
         this.props.onOpen();
       }
-    } else if (!nextState.isOpen && this.state.isOpen) {
-      global.addEventListener('keydown', this.handleKeyDown);
-      global.removeEventListener('scroll', this.handleWindowScroll, {capture: true});
+    } else if (!this.state.isOpen && prevState.isOpen) {
+      global.addEventListener("keydown", this.handleKeyDown);
+      global.removeEventListener("scroll", this.handleWindowScroll, {
+        capture: true
+      });
 
       if (this.props.onClose) {
         this.props.onClose();
@@ -68,30 +70,26 @@ export default class Select extends Component {
   }
 
   getInitialSelectedID(props) {
-    return props.defaultID || props.children.find(child => child.id != null) || '';
+    return (
+      props.defaultID || props.children.find(child => child.id != null) || ""
+    );
   }
 
   getItemList(children) {
-    return children.reduce(
-      (accumulator, child) => {
-        if (child.props.placeholder) {
-          return accumulator;
-        }
-
-        accumulator.push(
-          React.cloneElement(
-            child,
-            {
-              onClick: this.handleItemClick,
-              isSelected: child.props.id === this.state.selectedID
-            }
-          )
-        );
-
+    return children.reduce((accumulator, child) => {
+      if (child.props.placeholder) {
         return accumulator;
-      },
-      []
-    );
+      }
+
+      accumulator.push(
+        React.cloneElement(child, {
+          onClick: this.handleItemClick,
+          isSelected: child.props.id === this.state.selectedID
+        })
+      );
+
+      return accumulator;
+    }, []);
   }
 
   getLabel() {
@@ -107,16 +105,14 @@ export default class Select extends Component {
   getSelectedItem(children) {
     const selectedItem = children.find((child, index) => {
       return (
-        (
-          (this.props.persistentPlaceholder && child.props.placeholder)
-          || (!this.state.selectedID && index === 0)
-        )
-        || child.props.id === this.state.selectedID
+        (this.props.persistentPlaceholder && child.props.placeholder) ||
+        (!this.state.selectedID && index === 0) ||
+        child.props.id === this.state.selectedID
       );
     });
 
     if (selectedItem) {
-      return React.cloneElement(selectedItem, {isTrigger: true});
+      return React.cloneElement(selectedItem, { isTrigger: true });
     }
   }
 
@@ -142,7 +138,8 @@ export default class Select extends Component {
         addonPlacement="after"
         onClick={this.handleTriggerClick}
         priority={this.props.priority}
-        wrap={false}>
+        wrap={false}
+      >
         <FormElementAddon className="select__indicator">
           <Chevron />
         </FormElementAddon>
@@ -158,7 +155,7 @@ export default class Select extends Component {
   };
 
   handleItemClick = id => {
-    this.setState({isOpen: false, selectedID: id}, () => {
+    this.setState({ isOpen: false, selectedID: id }, () => {
       if (this.props.onSelect) {
         this.props.onSelect(id);
       }
@@ -170,10 +167,10 @@ export default class Select extends Component {
   };
 
   handleKeyDown = event => {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       event.preventDefault();
 
-      this.setState({isOpen: false});
+      this.setState({ isOpen: false });
     }
   };
 
@@ -181,21 +178,21 @@ export default class Select extends Component {
     this.toggleOpenState();
   };
 
-  handleWindowScroll = (event) => {
+  handleWindowScroll = event => {
     if (this.menuRef && !this.menuRef.contains(event.target)) {
       if (this.state.isOpen) {
-        this.setState({isOpen: false});
+        this.setState({ isOpen: false });
       }
     }
   };
 
-  setInputRef = ref => this.inputRef = ref;
+  setInputRef = ref => (this.inputRef = ref);
 
-  setMenuRef = ref => this.menuRef = ref;
+  setMenuRef = ref => (this.menuRef = ref);
 
   setTriggerRef = ref => {
     if (this.state.triggerRef !== ref) {
-      this.setState({triggerRef: ref});
+      this.setState({ triggerRef: ref });
     }
   };
 
@@ -208,12 +205,12 @@ export default class Select extends Component {
   render() {
     const selectItems = React.Children.toArray(this.props.children);
     const classes = classnames(
-      'select form__element',
+      "select form__element",
       this.props.additionalClassNames,
       {
-        'form__element--disabled': this.props.disabled,
-        'form__element--label-offset': this.props.labelOffset,
-        'select--is-open': this.state.isOpen
+        "form__element--disabled": this.props.disabled,
+        "form__element--label-offset": this.props.labelOffset,
+        "select--is-open": this.state.isOpen
       }
     );
 
@@ -233,7 +230,8 @@ export default class Select extends Component {
             tabIndex={-1}
             ref={this.setInputRef}
             type="text"
-            value={this.state.selectedID} />
+            value={this.state.selectedID}
+          />
           {this.getTrigger(selectItems)}
           <Portal>
             <ContextMenu

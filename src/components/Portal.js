@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from "prop-types";
+import React from "react";
+import ReactDOM from "react-dom";
 
 class Portal extends React.Component {
   static defaultProps = {
@@ -14,10 +14,9 @@ class Portal extends React.Component {
   mountPoint = null;
 
   componentDidMount() {
-    this.mountPoint = global.document.createElement('div');
-    this.mountPoint.classList.add('portal')
+    this.mountPoint = global.document.createElement("div");
+    this.mountPoint.classList.add("portal");
     global.document.body.appendChild(this.mountPoint);
-    this.renderChildren(this.props);
   }
 
   componentWillUnmount() {
@@ -25,16 +24,9 @@ class Portal extends React.Component {
     global.document.body.removeChild(this.mountPoint);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.renderChildren(nextProps);
-  }
-
-  renderChildren(props) {
-    ReactDOM.render(props.children, this.mountPoint);
-  }
-
   render() {
-    return null;
+    if (this.mountPoint == null) return null;
+    return ReactDOM.createPortal(this.props.children, this.mountPoint);
   }
 }
 

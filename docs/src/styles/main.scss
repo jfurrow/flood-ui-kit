@@ -32,6 +32,7 @@ body {
     background: $white;
     display: flex;
     flex: 1 1 auto;
+    max-height: 100%;
   }
 
   &__navigation,
@@ -50,11 +51,8 @@ body {
     overflow: auto;
 
     .section {
-
       &:first-child {
-
         .section {
-
           &__heading {
             margin-top: 0;
           }
@@ -65,7 +63,6 @@ body {
 }
 
 .navigation {
-
   &__heading {
     margin-top: 0;
   }
